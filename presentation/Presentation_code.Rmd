@@ -37,8 +37,8 @@ header-includes:
 editor_options: 
   chunk_output_type: inline
   
-# color names that work are here https://en.wikibooks.org/wiki/LaTeX/Colors#The_68_standard_colors_known_to_dvips 
-
+# color names that are recognized by latex are here: 
+#  https://en.wikibooks.org/wiki/LaTeX/Colors#The_68_standard_colors_known_to_dvips 
 urlcolor: blue
 linkcolor: NavyBlue
 
@@ -88,6 +88,7 @@ linkcolor: NavyBlue
 - point to your own figures, tables, results, etc.
 
 
+<!-- ==================================================================================== -->
  
   
 # T.o.C. 
@@ -105,12 +106,23 @@ linkcolor: NavyBlue
 ## Table of Contents (cont.)
 - The double '##' creates the next layer of organization
 - Each '##' within a topic (single '#') appears as an open circle in the header
+- The Table of Contents are links that can be 'clicked' -- takes you to the slide you clicked on
 
 
 ##  Another slide
 - Here is another slide
   - And a sub-bullet
     - And a sub-sub bullet
+    
+## Slide Levels
+- In the yaml I have: slide-level: 3
+- Below, I've added 3 '#' symbols to create Sub-topics on a slide
+    
+### Third layer - 1
+- what does this do
+
+### Third layer - 2
+- and this?
   
 
 
@@ -194,7 +206,9 @@ catch.final.year <- tail(my.table[,ncol(my.table)], 1)
 <!-- -- example chunk to read output and make a plot -->
 ```{r    echo=FALSE, message=FALSE, warnings=FALSE,  out.height='75%', fig.align='center'}
 
-library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
 
 res <- readRDS(file=file.path(params$rds.dir,
                                       'fake.output.RDS' )  )
@@ -232,7 +246,9 @@ ggplot(res.df, aes(x=Year, y=SSB, col=Model, linetype=Model)) +
 <!-- -- example chunk to read output and make 2 plots -->
 ```{r    echo=FALSE, message=FALSE, warnings=FALSE,  figures-side, fig.show="hold", fig.align='center', fig.dim=c(5,5), out.width="45%"}
 
-library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
 
 res <- readRDS(file=file.path(params$rds.dir,
                                       'fake.output.RDS' )  )

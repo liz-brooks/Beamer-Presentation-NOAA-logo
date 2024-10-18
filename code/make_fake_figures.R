@@ -1,4 +1,6 @@
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 
 
 fake_table <- data.frame(Year=seq(2019,2023), 
