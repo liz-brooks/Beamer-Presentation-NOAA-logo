@@ -12,11 +12,12 @@ fig_caption: FALSE
 theme: "Singapore"
 slide-level: 3
 date: "`r Sys.Date()`"
+
+
 params:
-    
-    rds.dir: "C:/Users/liz.brooks/R/Beamer-Presentation-NOAA-logo/rds"
-    fig.dir: "C:/Users/liz.brooks/R/Beamer-Presentation-NOAA-logo/figures"
-    table.dir: "C:/Users/liz.brooks/R/Beamer-Presentation-NOAA-logo/tables"
+    rds.dir: !r here::here('rds' )
+    fig.dir: !r here::here('figures' )
+    table.dir: !r here::here( 'tables' )
 header-includes: 
 - \definecolor{noaaskyblue}{RGB}{31,153,222}
 - \definecolor{noaamedblue}{RGB}{5,25,155}
@@ -42,10 +43,10 @@ editor_options:
 urlcolor: blue
 linkcolor: NavyBlue
 
-  
-  
 
 ---
+
+
  
 # Yaml
 
@@ -56,13 +57,30 @@ linkcolor: NavyBlue
 - Here's [another resource](https://garrettgman.github.io/rmarkdown/beamer_presentation_format.html#overview)
 
 
+<!-- -- Load libraries and specify directories that are referenced in chunks below -->
+<!-- this is my sneaky way to load libraries once near the top of the Rmd file -->
+<!-- if i moved this chunk before the first '#' it would create a blank slide! -->
+<!-- so instead i'm sticking it here on the first topic slide -->
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+library(kableExtra)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+  
+ 
+```
+
+
+
 ## Requirements
 
 - Note that this produces pdf output
 - You'll need some flavor of TeX 
 
 <!-- -- example chunk to include figure from file -->
-```{r, echo=FALSE, message=FALSE, warnings=FALSE, out.width='60%', fig.align='center'}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width='60%', fig.align='center'}
  knitr::include_graphics(file.path( "beamer_requirements.PNG" )  )
 ```
 
@@ -79,15 +97,19 @@ linkcolor: NavyBlue
 
 
 ## Get Started on Your Own Beamer
-- You can grabe the file **Presentation_code.Rmd** in the folder *presentation*
+- You can grab the file **Presentation_code.Rmd** in the folder *presentation*
 - Just modify these elements in the header
   - title
   - subtitle (if using one)
   - author
   - institute
-- point to your own figures, tables, results, etc.
+- point to your own figures, tables, results, etc. 
+  - modify these in the params section of the yaml, e.g.:
+  
+    fig.dir: !r here::here('figures' )
 
 
+<!-- i use the line below to visually separate between Table of Content items, but it is not mandatory -->
 <!-- ==================================================================================== -->
  
   
@@ -97,10 +119,10 @@ linkcolor: NavyBlue
 ## Table of Contents
 - The single '#' creates the title slide (w/o content) to transition between topics
 - The text beside '#' appears in the header
-- I try to keep these short and simple 
+- Try to keep these short and simple 
   - take a gander at the header in this presenation
   - it could get messy if each topic has a lot of words
-- For assessments, I just titled each topic 'TOR-1', 'TOR-2', etc.
+- For assessments, you could title each topic 'TOR-1', 'TOR-2', etc.
 
 
 ## Table of Contents (cont.)
@@ -139,9 +161,9 @@ linkcolor: NavyBlue
 - Just insert a chunk like this (see Rmd file) and you'll get this table: 
 
 <!-- -- example chunk to make a table -->
-```{r,  echo=FALSE, message=FALSE, warnings=FALSE}
+```{r,  echo=FALSE, message=FALSE, warning=FALSE}
 
-library(kableExtra)
+
 my.table <- read.csv(file=file.path(params$table.dir,
                                       'fake_table.csv' ), 
                      header=TRUE, check.names=FALSE  )
@@ -182,7 +204,7 @@ catch.final.year <- tail(my.table[,ncol(my.table)], 1)
 
 
 <!-- -- example chunk to include figure from file -->
-```{r, echo=FALSE, message=FALSE, warnings=FALSE, out.width='90%', fig.align='center'}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width='90%', fig.align='center'}
  knitr::include_graphics(file.path(params$fig.dir,  
                                     "fake.fig.plot.png" )  )
 ```
@@ -194,7 +216,7 @@ catch.final.year <- tail(my.table[,ncol(my.table)], 1)
 
 
 <!-- -- example chunk to include figure from file -->
-```{r, echo=FALSE, message=FALSE, warnings=FALSE, out.width='95%', fig.align='center'}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width='95%', fig.align='center'}
  knitr::include_graphics(file.path(params$fig.dir,  
                                    "fake.model.plot.png" ) )
 ```
@@ -204,11 +226,9 @@ catch.final.year <- tail(my.table[,ncol(my.table)], 1)
 - Control size and alignment in r chunk options (out.height and fig.align)
 
 <!-- -- example chunk to read output and make a plot -->
-```{r    echo=FALSE, message=FALSE, warnings=FALSE,  out.height='75%', fig.align='center'}
+```{r    echo=FALSE, message=FALSE, warning=FALSE,  out.height='75%', fig.align='center'}
 
-library(tidyr)
-library(dplyr)
-library(ggplot2)
+
 
 res <- readRDS(file=file.path(params$rds.dir,
                                       'fake.output.RDS' )  )
@@ -218,7 +238,7 @@ res.df <- data.frame(Year=res$Years,
   pivot_longer(cols=SSB1:SSB2, values_to='SSB', names_to='Model', names_prefix='SSB') %>%
   mutate(Model=paste0('M', Model))
 
-knitr::opts_knit$set(dev.args = list(type = "cairo"))
+
 
 ggplot(res.df, aes(x=Year, y=SSB, col=Model, linetype=Model)) +
   geom_line() +
@@ -241,14 +261,12 @@ ggplot(res.df, aes(x=Year, y=SSB, col=Model, linetype=Model)) +
 
 - Let's revisit the plot on the previous slide
 - can control plot size with fig.dim=c(width, height) and displayed size (out.width) in the chunk options
-- out.width % takes some trial and error (I used 45% here)
+- out.width % takes some trial and error (I used "45%" here)
 
 <!-- -- example chunk to read output and make 2 plots -->
-```{r    echo=FALSE, message=FALSE, warnings=FALSE,  figures-side, fig.show="hold", fig.align='center', fig.dim=c(5,5), out.width="45%"}
+```{r    echo=FALSE, message=FALSE, warning=FALSE,  figures-side, fig.show="hold", fig.align='center', fig.dim=c(5,5), out.width="45%"}
 
-library(tidyr)
-library(dplyr)
-library(ggplot2)
+
 
 res <- readRDS(file=file.path(params$rds.dir,
                                       'fake.output.RDS' )  )
@@ -260,8 +278,6 @@ res.df <- data.frame(Year=res$Years,
   pivot_longer(-Year, names_to = c(".value", "Model"), names_sep="_" ) %>%
   mutate(Model=paste0('M', Model))
 
-
-# knitr::opts_knit$set(dev.args = list(type = "cairo"))
 
 ggplot(res.df, aes(x=Year, y=SSB, col=Model, linetype=Model)) +
   geom_line() +

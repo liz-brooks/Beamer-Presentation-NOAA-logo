@@ -1,6 +1,7 @@
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(here)
 
 
 fake_table <- data.frame(Year=seq(2019,2023), 
@@ -9,7 +10,7 @@ fake_table <- data.frame(Year=seq(2019,2023),
                     check.names=FALSE
                     )
 fake_table
-write.csv(fake_table, file=file.path(getwd(), 'tables', 'fake_table.csv'), row.names=FALSE)
+write.csv(fake_table, file=file.path(here(), 'tables', 'fake_table.csv'), row.names=FALSE)
 
 
 
@@ -34,7 +35,7 @@ fake.fig.plot <- ggplot(fake.fig, aes(x=x, y=y, col=as.factor(text.col) )  ) +
   theme(legend.text = element_text(colour="black", size = 14, face = "bold"), 
         legend.title=element_text(size=10)) 
 
-ggsave(fake.fig.plot, filename=file.path(getwd(), 'figures', 'fake.fig.plot.png'),  height=6, width=9)
+ggsave(fake.fig.plot, filename=file.path(here(), 'figures', 'fake.fig.plot.png'),  height=6, width=9)
 
 
 
@@ -63,7 +64,7 @@ fake.model.plot <- ggplot(fake.model.results, aes(x=Year, y=Estimate, color=Mode
   theme(legend.text = element_text(colour="black", size = 14, face = "bold"), 
         legend.title=element_text(size=10)) 
 
-ggsave(fake.model.plot, filename=file.path(getwd(), 'figures', 'fake.model.plot.png'),  height=6, width=9)
+ggsave(fake.model.plot, filename=file.path(here(), 'figures', 'fake.model.plot.png'),  height=6, width=9)
 
 
 
@@ -77,6 +78,6 @@ fake.output <- list(Update=2024, Years=years,
                  M2=data.frame(SSB=SSB2, Catch.pred=SSB2*runif(n=nyears, min=0.45, max=0.6) )
                                 )
 
-saveRDS(fake.output, file=file.path(getwd(), 'rds', 'fake.output.RDS'))
+saveRDS(fake.output, file=file.path(here(), 'rds', 'fake.output.RDS'))
 
 
